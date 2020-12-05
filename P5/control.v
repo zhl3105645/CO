@@ -44,16 +44,16 @@ module control(
 	 //中间信号
 	wire ADDU,SUBU,JR,ORI,LW,SW,BEQ,LUI,JAL,J;
 	//判断指令
-    assign ADDU=~op[0]&~op[1]&~op[2]&~op[3]&~op[4]&~op[5]&func[0]&~func[1]&~func[2]&~func[3]&~func[4]&func[5];
-    assign SUBU=~op[0]&~op[1]&~op[2]&~op[3]&~op[4]&~op[5]&func[0]&func[1]&~func[2]&~func[3]&~func[4]&func[5];
-    assign JR=~op[0]&~op[1]&~op[2]&~op[3]&~op[4]&~op[5]&~func[0]&~func[1]&~func[2]&func[3]&~func[4]&~func[5];
-    assign ORI=op[0]&~op[1]&op[2]&op[3]&~op[4]&~op[5];
-    assign LW=op[0]&op[1]&~op[2]&~op[3]&~op[4]&op[5];
-    assign SW=op[0]&op[1]&~op[2]&op[3]&~op[4]&op[5];
-    assign BEQ=~op[0]&~op[1]&op[2]&~op[3]&~op[4]&~op[5];
-    assign LUI=op[0]&op[1]&op[2]&op[3]&~op[4]&~op[5];
-    assign JAL=op[0]&op[1]&~op[2]&~op[3]&~op[4]&~op[5];
-    assign J=~op[0]&op[1]&~op[2]&~op[3]&~op[4]&~op[5];
+	 assign ADDU=(op==6'b000000&&func==6'b100001)?1'b1:1'b0;
+	 assign SUBU=(op==6'b000000&&func==6'b100011)?1'b1:1'b0;
+	 assign JR=(op==6'b000000&&func==6'b001000)?1'b1:1'b0;
+	 assign ORI=(op==6'b001101)?1'b1:1'b0;
+	 assign LW=(op==6'b100011)?1'b1:1'b0;
+	 assign SW=(op==6'b101011)?1'b1:1'b0;
+	 assign BEQ=(op==6'b000100)?1'b1:1'b0;
+	 assign LUI=(op==6'b001111)?1'b1:1'b0;
+	 assign JAL=(op==6'b000011)?1'b1:1'b0;
+	 assign J=(op==6'b000010)?1'b1:1'b0;
 	 //判断控制信号
 	 always@(*)
 		begin
