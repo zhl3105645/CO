@@ -84,32 +84,32 @@ module Unit(
 			if((rsE!=5'd0)&&(rsE==WriteRegM)&&RegWriteM)
 				begin
 					if(TnewM==2'b00)
-						begin
-							forwardAE=2'b10;
-						end
+						forwardAE=2'b10;
+					else 
+						forwardAE=2'b00;
 				end
 			else if((rsE!=5'd0)&&(rsE==WriteRegW)&&RegWriteW)
 				begin
 					if(TnewW==2'b00)
-						begin
-							forwardAE=2'b01;
-						end
+						forwardAE=2'b01;
+					else 
+						forwardAE=2'b00;
 				end
 			else 
 				forwardAE=2'b00;
 			if((rtE!=5'd0)&&(rtE==WriteRegM)&&RegWriteM)
 				begin
 					if(TnewM==2'b00)
-						begin
-							forwardBE=2'b10;
-						end
+						forwardBE=2'b10;
+					else 
+						forwardBE=2'b00;
 				end
 			else if((rtE!=5'd0)&&(rtE==WriteRegW)&&RegWriteW)
 				begin
 					if(TnewW==2'b00)
-						begin
-							forwardBE=2'b01;
-						end
+						forwardBE=2'b01;
+					else 
+						forwardBE=2'b00;
 				end
 			else 
 				forwardBE=2'b00;
@@ -117,9 +117,9 @@ module Unit(
 			if((WriteRegM!=5'd0)&&(WriteRegM==WriteRegW)&&RegWriteW&&MemWriteM)
 				begin
 					if(TnewW==2'b00)
-						begin
-							forwardM=1'b1;
-						end
+						forwardM=1'b1;
+					else 
+						forwardM=1'b0;
 				end
 			else 
 				forwardM=1'b0;

@@ -51,17 +51,19 @@ module M_W_register(
 					ext_immW=32'd0;
 					TnewW=2'b00;
 				end
-			RegWriteW=RegWriteM;
-			MemtoRegW=MemtoRegM;
-			RDW=RDM;
-			ALUoutW=ALUoutM;
-			WriteRegW=WriteRegM;
-			PC_4W=PC_4M;
-			ext_immW=ext_immM;
-			if(TnewM==2'b00)
-					TnewW=2'b00;
 			else
-					TnewW=TnewM-2'b01;
+				begin
+					RegWriteW=RegWriteM;
+					MemtoRegW=MemtoRegM;
+					RDW=RDM;
+					ALUoutW=ALUoutM;
+					WriteRegW=WriteRegM;
+					PC_4W=PC_4M;
+					ext_immW=ext_immM;
+					if(TnewM==2'b00)
+							TnewW=2'b00;
+					else
+							TnewW=TnewM-2'b01;
+				end
 		end
-
 endmodule
