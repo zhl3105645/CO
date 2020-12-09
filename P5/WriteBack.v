@@ -23,12 +23,12 @@ module WriteBack(
     input [1:0] MemtoRegW,
     input [31:0] RDW,
     input [31:0] ALUoutW,
-    input [4:0] WriteRegW1,
+    input [4:0] AwriteW1,
     input [31:0] PC_4W,
     input [31:0] ext_immW,
     output RegWriteW2,
     output [31:0] ResultW,
-    output [4:0] WriteRegW2,
+    output [4:0] AwriteW2,
 	 output [31:0] PC_backD
     );
 	 wire [31:0] PC_8;
@@ -43,5 +43,5 @@ module WriteBack(
     .out(ResultW)
     );
 	assign RegWriteW2=RegWriteW1;
-	assign WriteRegW2=WriteRegW1;
+	assign AwriteW2=AwriteW1;
 endmodule

@@ -25,18 +25,18 @@ module M_W_register(
     input [1:0] MemtoRegM,
     input [31:0] RDM,
     input [31:0] ALUoutM,
-    input [4:0] WriteRegM,
     input [31:0] PC_4M,
     input [31:0] ext_immM,
 	 input [1:0] TnewM,
+	 input [4:0] AwriteM,
     output reg RegWriteW,
     output reg [1:0] MemtoRegW,
     output reg [31:0] RDW,
     output reg [31:0] ALUoutW,
-    output reg [4:0] WriteRegW,
     output reg [31:0] PC_4W,
     output reg [31:0] ext_immW,
-	 output reg [1:0] TnewW
+	 output reg [1:0] TnewW,
+	 output reg [4:0] AwriteW
     );
 	always@(posedge clk)
 		begin
@@ -46,10 +46,10 @@ module M_W_register(
 					MemtoRegW=2'b00;
 					RDW=32'd0;
 					ALUoutW=32'd0;
-					WriteRegW=5'd0;
 					PC_4W=32'd0;
 					ext_immW=32'd0;
 					TnewW=2'b00;
+					AwriteW=5'd0;
 				end
 			else
 				begin
@@ -57,9 +57,9 @@ module M_W_register(
 					MemtoRegW=MemtoRegM;
 					RDW=RDM;
 					ALUoutW=ALUoutM;
-					WriteRegW=WriteRegM;
 					PC_4W=PC_4M;
 					ext_immW=ext_immM;
+					AwriteW=AwriteM;
 					if(TnewM==2'b00)
 							TnewW=2'b00;
 					else

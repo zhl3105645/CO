@@ -49,36 +49,35 @@ module mips(
 	//五级流水线信号
 	//F
 	wire [31:0] InstrF,PC_4F;
-	//D
+	//F_D
 	wire [31:0] InstrD,PC_4D;
-	wire [31:0] RD1D,RD2D,ext_offsetD,ext_indexD,GPR_rsD;
-	wire [4:0] rsD,rtD,rdD;
+	//D
+	wire [31:0] RD1D,RD2D,ext_immD,ext_index,GPR_rs,PC_4D1;
+	wire [4:0] A_rsD,A_rtD,AwriteD;
 	wire [1:0] Tuse_rs,Tuse_rt,TnewD;
-	wire [31:0] PC_4D1;
-	//E
-	wire [31:0] RD1E,RD2E,ext_offsetE,PC_4E;
-	wire [4:0] rsE,rtE,rdE;
+	//D_E
+	wire [31:0] RD1E,RD2E,PC_4E,ext_immE;
 	wire [1:0] TnewE;
-	wire [31:0] ALUoutE,WriteDataE;
-	wire [31:0] PC_4E1,ext_offsetE1;
-	wire [4:0] WriteRegE;
+	wire [4:0] A_rsE,A_rtE,AwriteE;
+	//E
+	wire [31:0] ALUoutE,WriteDataE,PC_4E1,ext_immE1;
 	wire [1:0] TnewE1;
-	//M
-	wire [31:0] ALUoutM,WriteDataM,PC_4M,ext_offsetM;
-	wire [4:0] WriteRegM;
+	wire [4:0] A_rsE1,A_rtE1,AwriteE1;
+	//E_M
+	wire [31:0] ALUoutM,WriteDataM,PC_4M,ext_immM;
 	wire [1:0] TnewM;
-	wire [31:0] RDM;
-	wire [31:0] PC_4M1,ext_offsetM1,ALUoutM1;
-	wire [4:0] WriteRegM1;
+	wire [4:0] A_rsM,A_rtM,AwriteM;
+	//M
+	wire [31:0] RDM,ALUoutM1,PC_4M1,ext_immM1;
 	wire [1:0] TnewM1;
-	//W
-	wire [31:0] RDW,ALUoutW,PC_4W,PCW,ext_offsetW;
-	wire [4:0] WriteRegW;
+	wire [4:0] AwriteM1;
+	//M_W
+	wire [31:0] RDW,ALUoutW,PC_4W,ext_immW;
 	wire [1:0] TnewW;
+	wire [4:0] AwriteW;
+	//W
 	wire [31:0] ResultW,PC_backD;
-	wire [4:0] WriteRegW1;
-	wire [1:0] TnewW1;
-	
+	wire [4:0] AwriteW1;
 	//实例化流水线
 	 //F
 	Fetch fetch (
@@ -86,9 +85,9 @@ module mips(
     .reset(reset), 
     .EN(~stallF), 
     .PCSrc(PCSrcD), 
-    .ext_offset(ext_offsetD), 
-    .ext_index(ext_indexD), 
-    .GPR_rs(GPR_rsD), 
+    .ext_imm(ext_immD), 
+    .ext_index(ext_index), 
+    .GPR_rs(GPR_rs), 
     .Instr(InstrF), 
     .PC_4(PC_4F)
     );
@@ -103,30 +102,30 @@ module mips(
     .PC_4D(PC_4D)
     );
 	 //D
-	 Decode decode (
+	Decode decode (
     .clk(clk), 
     .reset(reset), 
     .WE(RegWriteW1), 
     .InstrD(InstrD), 
-    .PC_4D1(PC_4D),
-	 .PC_backD(PC_backD),
-    .A3(WriteRegW1), 
+    .PC_4D1(PC_4D), 
+    .PC_backD(PC_backD), 
+    .A3(AwriteW1), 
     .WD3(ResultW), 
     .forwardAD(forwardAD), 
     .forwardBD(forwardBD), 
-    .ALUoutM(ALUoutM),
+    .ALUoutM(ALUoutM), 
     .RD1D(RD1D), 
     .RD2D(RD2D), 
-    .rsD(rsD), 
-    .rtD(rtD), 
-    .rdD(rdD), 
-    .ext_imm(ext_offsetD), 
-    .ext_index(ext_indexD), 
-    .GPR_rs(GPR_rsD), 
-    .PC_4D2(PC_4D1),
+    .ext_imm(ext_immD), 
+    .ext_index(ext_index), 
+    .GPR_rs(GPR_rs), 
+    .PC_4D2(PC_4D1), 
     .Tuse_rs(Tuse_rs), 
     .Tuse_rt(Tuse_rt), 
     .TnewD(TnewD), 
+    .A_rsD(A_rsD), 
+    .A_rtD(A_rtD), 
+    .AwriteD(AwriteD), 
     .RegWriteD(RegWriteD), 
     .MemtoRegD(MemtoRegD), 
     .MemWriteD(MemWriteD), 
@@ -138,7 +137,7 @@ module mips(
 	 //D_E
 	 D_E_register d_e (
     .clk(clk), 
-	 .reset(reset),
+    .reset(reset), 
     .clr(flushE), 
     .RegWriteD(RegWriteD), 
     .MemtoRegD(MemtoRegD), 
@@ -148,12 +147,12 @@ module mips(
     .RegDstD(RegDstD), 
     .RD1D(RD1D), 
     .RD2D(RD2D), 
-    .rsD(rsD), 
-    .rtD(rtD), 
-    .rdD(rdD), 
     .PC_4D(PC_4D1), 
-    .ext_immD(ext_offsetD), 
+    .ext_immD(ext_immD), 
     .TnewD(TnewD), 
+    .A_rsD(A_rsD), 
+    .A_rtD(A_rtD), 
+    .AwriteD(AwriteD), 
     .RegWriteE(RegWriteE), 
     .MemtoRegE(MemtoRegE), 
     .MemWriteE(MemWriteE), 
@@ -162,65 +161,71 @@ module mips(
     .RegDstE(RegDstE), 
     .RD1E(RD1E), 
     .RD2E(RD2E), 
-    .rsE(rsE), 
-    .rtE(rtE), 
-    .rdE(rdE), 
     .PC_4E(PC_4E), 
-    .ext_immE(ext_offsetE), 
-    .TnewE(TnewE)
+    .ext_immE(ext_immE), 
+    .TnewE(TnewE), 
+    .A_rsE(A_rsE), 
+    .A_rtE(A_rtE), 
+    .AwriteE(AwriteE)
     );
 	 //E
-	Execute extcute (
-    .ALUoutM(ALUoutM), 
-    .ResultW(ResultW), 
-    .forwardAE(forwardAE), 
-    .forwardBE(forwardBE), 
+	Execute execute (
     .RegWriteE1(RegWriteE), 
     .MemtoRegE1(MemtoRegE), 
     .MemWriteE1(MemWriteE), 
     .ALUcontrolE(ALUcontrolE), 
     .ALUSrcE(ALUSrcE), 
     .RegDstE(RegDstE), 
+    .ALUoutM(ALUoutM), 
+    .ResultW(ResultW), 
+    .forwardAE(forwardAE), 
+    .forwardBE(forwardBE), 
     .RD1E(RD1E), 
     .RD2E(RD2E), 
-    .rsE(rsE), 
-    .rtE(rtE), 
-    .rdE(rdE), 
     .PC_4E1(PC_4E), 
-    .ext_immE1(ext_offsetE), 
+    .ext_immE1(ext_immE), 
     .TnewE1(TnewE), 
+    .A_rsE1(A_rsE), 
+    .A_rtE1(A_rtE), 
+    .AwriteE1(AwriteE), 
     .RegWriteE2(RegWriteE1), 
     .MemtoRegE2(MemtoRegE1), 
     .MemWriteE2(MemWriteE1), 
     .ALUoutE(ALUoutE), 
     .WriteDataE(WriteDataE), 
-    .WriteRegE(WriteRegE), 
     .PC_4E2(PC_4E1), 
-    .ext_immE2(ext_offsetE1), 
-    .TnewE2(TnewE1)
+    .ext_immE2(ext_immE1), 
+    .TnewE2(TnewE1), 
+    .A_rsE2(A_rsE1), 
+    .A_rtE2(A_rtE1), 
+    .AwriteE2(AwriteE1)
     );
 	//E_M
 	E_M_register e_m (
     .clk(clk), 
-	 .reset(reset),
+    .reset(reset), 
     .RegWriteE(RegWriteE1), 
     .MemtoRegE(MemtoRegE1), 
     .MemWriteE(MemWriteE1), 
     .ALUoutE(ALUoutE), 
     .WriteDataE(WriteDataE), 
-    .WriteRegE(WriteRegE), 
     .PC_4E(PC_4E1), 
-    .ext_immE(ext_offsetE1), 
+    .ext_immE(ext_immE1), 
     .TnewE(TnewE1), 
+    .A_rsE(A_rsE1), 
+    .A_rtE(A_rtE1), 
+    .AwriteE(AwriteE1), 
     .RegWriteM(RegWriteM), 
     .MemtoRegM(MemtoRegM), 
     .MemWriteM(MemWriteM), 
     .ALUoutM(ALUoutM), 
     .WriteDataM(WriteDataM), 
-    .WriteRegM(WriteRegM), 
-    .PC_4M(PC_4M),
-    .ext_immM(ext_offsetM), 
-    .TnewM(TnewM)
+    .PC_4M(PC_4M), 
+    .ext_immM(ext_immM), 
+    .TnewM(TnewM), 
+    .A_rsM(A_rsM), 
+    .A_rtM(A_rtM), 
+    .AwriteM(AwriteM)
     );
 	 //M
 	 Memory memory (
@@ -229,41 +234,43 @@ module mips(
     .RegWriteM1(RegWriteM), 
     .MemtoRegM1(MemtoRegM), 
     .MemWriteM(MemWriteM), 
+    .ResultW(ResultW), 
+    .forwardM(forwardM), 
     .ALUoutM1(ALUoutM), 
     .WriteDataM(WriteDataM), 
-    .WriteRegM1(WriteRegM), 
     .PC_4M1(PC_4M), 
-    .ext_immM1(ext_offsetM), 
+    .ext_immM1(ext_immM), 
     .TnewM1(TnewM), 
+    .AwriteM1(AwriteM), 
     .RegWriteM2(RegWriteM1), 
     .MemtoRegM2(MemtoRegM1), 
     .RDM(RDM), 
     .ALUoutM2(ALUoutM1), 
-    .WriteRegM2(WriteRegM1), 
     .PC_4M2(PC_4M1), 
-    .ext_immM2(ext_offsetM1), 
-    .TnewM2(TnewM1)
+    .ext_immM2(ext_immM1), 
+    .TnewM2(TnewM1), 
+    .AwriteM2(AwriteM1)
     );
 	 //M_W
 	 M_W_register m_w (
     .clk(clk), 
-	 .reset(reset),
+    .reset(reset), 
     .RegWriteM(RegWriteM1), 
     .MemtoRegM(MemtoRegM1), 
     .RDM(RDM), 
     .ALUoutM(ALUoutM1), 
-    .WriteRegM(WriteRegM1), 
     .PC_4M(PC_4M1), 
-    .ext_immM(ext_offsetM1), 
+    .ext_immM(ext_immM1), 
     .TnewM(TnewM1), 
+    .AwriteM(AwriteM1), 
     .RegWriteW(RegWriteW), 
     .MemtoRegW(MemtoRegW), 
     .RDW(RDW), 
     .ALUoutW(ALUoutW), 
-    .WriteRegW(WriteRegW), 
     .PC_4W(PC_4W), 
-    .ext_immW(ext_offsetW), 
-    .TnewW(TnewW)
+    .ext_immW(ext_immW), 
+    .TnewW(TnewW), 
+    .AwriteW(AwriteW)
     );
 	 //W
 	 WriteBack writeback (
@@ -271,33 +278,29 @@ module mips(
     .MemtoRegW(MemtoRegW), 
     .RDW(RDW), 
     .ALUoutW(ALUoutW), 
-    .WriteRegW1(WriteRegW), 
+    .AwriteW1(AwriteW), 
     .PC_4W(PC_4W), 
-    .ext_immW(ext_offsetW), 
+    .ext_immW(ext_immW), 
     .RegWriteW2(RegWriteW1), 
     .ResultW(ResultW), 
-    .WriteRegW2(WriteRegW1),
-	 .PC_backD(PC_backD)
+    .AwriteW2(AwriteW1), 
+    .PC_backD(PC_backD)
     );
 	//实例化Unit
 	Unit unit (
     .Tuse_rs(Tuse_rs), 
     .Tuse_rt(Tuse_rt), 
-    .TnewD(TnewD), 
     .TnewE(TnewE), 
     .TnewM(TnewM), 
     .TnewW(TnewW), 
-    .rsD(rsD), 
-    .rtD(rtD), 
-    .rsE(rsE), 
-    .rtE(rtE), 
-	 .WriteRegE(WriteRegE), 
-    .WriteRegM(WriteRegM), 
-    .WriteRegW(WriteRegW), 
-	 .RegWriteE(RegWriteE),
-    .RegWriteM(RegWriteM), 
-    .RegWriteW(RegWriteW), 
-    .MemWriteM(MemWriteM), 
+    .A_rsD(A_rsD), 
+    .A_rtD(A_rtD), 
+    .A_rsE(A_rsE), 
+    .A_rtE(A_rtE), 
+    .A_rtM(A_rtM), 
+    .AwriteE(AwriteE), 
+    .AwriteM(AwriteM), 
+    .AwriteW(AwriteW), 
     .stallF(stallF), 
     .stallD(stallD), 
     .flushE(flushE), 

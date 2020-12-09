@@ -58,12 +58,13 @@ module GRF(
                         end
                 end
         end
-	 always@(negedge clk)
+	 always@(*)//寄存器内部转发
 		begin
-			if(A1==A3&&WE==1'b1&&A3!=5'd0)
-				RD1=WD3;//寄存器内部转发
+			if((A1==A3)&&(WE==1'b1)&&(A3!=5'd0))
+				RD1=WD3;
 			else 
 				RD1=(A1==5'd0)?32'd0:GPR[A1];
+				
 			if(A2==A3&&WE==1'b1&&A3!=5'd0)
 				RD2=WD3;
 			else 

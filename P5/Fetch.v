@@ -23,7 +23,7 @@ module Fetch(
     input reset,
 	 input EN,
     input [1:0] PCSrc,
-    input [31:0] ext_offset,
+    input [31:0] ext_imm,
     input [31:0] ext_index,
     input [31:0] GPR_rs,
     output [31:0] Instr,
@@ -32,8 +32,8 @@ module Fetch(
     reg [31:0] im[0:1023];
 	 reg [31:0] PC;
 	 wire [31:0] nPC;
-	 wire [31:0] ext_imm;
-	 assign ext_imm=PC+(ext_offset<<2);
+	 wire [31:0] ext_offset;
+	 assign ext_offset=PC+(ext_imm<<2);
     //»úÆ÷Âë¶ÁÈ¡
 	initial 
         begin
@@ -43,7 +43,7 @@ module Fetch(
 		
 	mux4_32 PC_next (
     .a0(PC_4), 
-    .a1(ext_imm), 
+    .a1(ext_offset), 
     .a2(ext_index), 
     .a3(GPR_rs), 
     .op(PCSrc), 

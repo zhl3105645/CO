@@ -30,12 +30,12 @@ module D_E_register(
     input [1:0] RegDstD,
     input [31:0] RD1D,
     input [31:0] RD2D,
-    input [4:0] rsD,
-    input [4:0] rtD,
-    input [4:0] rdD,
     input [31:0] PC_4D,
 	 input [31:0] ext_immD,
 	 input [1:0] TnewD,
+	 input [4:0] A_rsD,
+    input [4:0] A_rtD,
+    input [4:0] AwriteD,
 	 output reg RegWriteE,
     output reg [1:0] MemtoRegE,
     output reg  MemWriteE,
@@ -44,12 +44,12 @@ module D_E_register(
     output reg [1:0] RegDstE,
     output reg [31:0] RD1E,
     output reg [31:0] RD2E,
-    output reg [4:0] rsE,
-    output reg [4:0] rtE,
-    output reg [4:0] rdE,
     output reg [31:0] PC_4E,
 	 output reg [31:0] ext_immE,
-	 output reg [1:0] TnewE
+	 output reg [1:0] TnewE,
+	 output reg [4:0] A_rsE,
+    output reg [4:0] A_rtE,
+    output reg [4:0] AwriteE
     );
 	always@(posedge clk)
 		begin
@@ -63,9 +63,9 @@ module D_E_register(
 					RegDstE=0;
 					RD1E=0;
 					RD2E=0;
-					rsE=0;
-					rtE=0;
-					rdE=0;
+					A_rsE=0;
+					A_rtE=0;
+					AwriteE=0;
 					PC_4E=0;
 					ext_immE=0;
 					TnewE=2'b00;
@@ -80,11 +80,11 @@ module D_E_register(
 					RegDstE=0;
 					RD1E=0;
 					RD2E=0;
-					rsE=0;
-					rtE=0;
-					rdE=0;
 					PC_4E=0;
 					ext_immE=0;
+					A_rsE=0;
+					A_rtE=0;
+					AwriteE=0;
 					if(TnewD==2'b00)
 						TnewE=2'b00;
 					else
@@ -100,9 +100,9 @@ module D_E_register(
 					RegDstE=RegDstD;
 					RD1E=RD1D;
 					RD2E=RD2D;
-					rsE=rsD;
-					rtE=rtD;
-					rdE=rdD;
+					A_rsE=A_rsD;
+					A_rtE=A_rtD;
+					AwriteE=AwriteD;
 					PC_4E=PC_4D;
 					ext_immE=ext_immD;
 					if(TnewD==2'b00)

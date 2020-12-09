@@ -32,9 +32,6 @@ module Decode(
 	 input [31:0] ALUoutM,
     output [31:0] RD1D,
     output [31:0] RD2D,
-    output [4:0] rsD,
-    output [4:0] rtD,
-    output [4:0] rdD,
 	 output [31:0] ext_imm,
 	 output [31:0] ext_index,
 	 output [31:0] GPR_rs,
@@ -42,6 +39,9 @@ module Decode(
 	 output [1:0] Tuse_rs,
 	 output [1:0] Tuse_rt,
     output [1:0] TnewD,
+	 output [4:0] A_rsD,
+	 output [4:0] A_rtD,
+	 output [4:0] AwriteD,
 	 output RegWriteD,
 	 output [1:0] MemtoRegD,
 	 output MemWriteD,
@@ -96,17 +96,16 @@ module Decode(
     .ext_offset(ext_imm)
     );
 	 AT at (
-    .op(op), 
-    .func(func), 
+    .InstrD(InstrD), 
     .Tuse_rs(Tuse_rs), 
     .Tuse_rt(Tuse_rt), 
-    .TnewD(TnewD)
+    .TnewD(TnewD), 
+    .A_rsD(A_rsD), 
+    .A_rtD(A_rtD), 
+    .AwriteD(AwriteD)
     );
 	assign RD1D=(forwardAD==1'b1)?ALUoutM:rd1;
 	assign RD2D=(forwardBD==1'b1)?ALUoutM:rd2;
-	assign rsD=rs;
-	assign rtD=rt;
-	assign rdD=rd;
 	assign ext_index={PC[31:28],index,2'b00};
 	assign GPR_rs=RD1D;
 	assign PC_4D2=PC_4D1;
