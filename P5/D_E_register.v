@@ -53,7 +53,7 @@ module D_E_register(
     );
 	always@(posedge clk)
 		begin
-			if(reset)
+			if(reset||clr)
 				begin
 					RegWriteE=0;
 					MemtoRegE=0;
@@ -69,26 +69,6 @@ module D_E_register(
 					PC_4E=0;
 					ext_immE=0;
 					TnewE=2'b00;
-				end
-			else if(clr)
-				begin
-					RegWriteE=0;
-					MemtoRegE=0;
-					MemWriteE=0;
-					ALUcontrolE=0;
-					ALUSrcE=0;
-					RegDstE=0;
-					RD1E=0;
-					RD2E=0;
-					PC_4E=0;
-					ext_immE=0;
-					A_rsE=0;
-					A_rtE=0;
-					AwriteE=0;
-					if(TnewD==2'b00)
-						TnewE=2'b00;
-					else
-						TnewE=TnewD-2'b01;
 				end
 			else 
 				begin

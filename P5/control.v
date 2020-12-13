@@ -42,7 +42,7 @@ module control(
 			 MemtoReg[1:0]=2'b00;
 		end
 	 //中间信号
-	wire ADDU,SUBU,JR,ORI,LW,SW,BEQ,LUI,JAL,J;
+	wire ADDU,SUBU,JR,ORI,LW,SW,BEQ,LUI,JAL,J,ADDI,JALR;
 	//判断指令
 	 assign ADDU=(op==6'b000000&&func==6'b100001)?1'b1:1'b0;
 	 assign SUBU=(op==6'b000000&&func==6'b100011)?1'b1:1'b0;
@@ -54,17 +54,19 @@ module control(
 	 assign LUI=(op==6'b001111)?1'b1:1'b0;
 	 assign JAL=(op==6'b000011)?1'b1:1'b0;
 	 assign J=(op==6'b000010)?1'b1:1'b0;
+	 assign ADDI=(op==6'b001000)?1'b1:1'b0;
+	 assign JALR=(op==6'b000000&&func==6'b001001)?1'b1:1'b0;
 	 //判断控制信号
 	 always@(*)
 		begin
-			 Branch[1:0]={JAL|JR|J,BEQ|JR};
+			 Branch[1:0]={JAL|JR|J|JALR,BEQ|JR|JALR};
 			 EXTop[1:0]={LUI,ORI};
 			 ALUcontrol[2:0]={1'b0,ORI,SUBU};
 			 MemWrite=SW;
-			 RegWrite=ADDU|SUBU|ORI|LW|LUI|JAL;
-			 RegDst[1:0]={JAL,ORI|LW|LUI};
-			 ALUSrc=ORI|LW|SW;
-			 MemtoReg[1:0]={LUI|JAL,LW|LUI};
+			 RegWrite=ADDU|SUBU|ORI|LW|LUI|JAL|ADDI|JALR;
+			 RegDst[1:0]={JAL,ORI|LW|LUI|ADDI};
+			 ALUSrc=ORI|LW|SW|ADDI;
+			 MemtoReg[1:0]={LUI|JAL|JALR,LW|LUI};
 		end
     
 endmodule
