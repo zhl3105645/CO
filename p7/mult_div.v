@@ -51,8 +51,10 @@ module mult_div(
 				end
 			else if(flush)
 				begin
-					i<=0;
-					Busy<=1'b0;
+					if(Busy==1'b1)
+						{hi,lo}<=temp;
+					i=0;
+					Busy=1'b0;
 				end
 			else if(Busy==1'b0)
 				begin

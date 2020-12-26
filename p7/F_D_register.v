@@ -32,6 +32,8 @@ module F_D_register(
 	output reg [6:2] ExcCodeD,
 	output reg if_bdD
     );
+	wire [31:0] PCF;
+	assign PCF=PC_4F-4;
 	always@(posedge clk)
 		begin
 			if(reset|CLR)
@@ -47,6 +49,8 @@ module F_D_register(
 					PC_4D<=PC_4F;
 					ExcCodeD[6:2]<=ExcCodeF[6:2];
 					if_bdD<=if_bdF;
+					//if(PCF==32'h000031c4)
+					//	$display("%d@%h: $%d <= %h", $time,PCF,5'd2,InstrF);
 				end
 		end
 endmodule

@@ -2,73 +2,53 @@
 
 module mips_tb;
 
-	// Inputs
-	reg clk;
-	reg reset;
-	reg interrupt;
-
-	// Outputs
 	wire [31:0] addr;
-	
+	reg clk,reset,interrupt;
+	integer interruptCounter;
+	reg [31:0] interruptAddress[0:63];
 
-	// Instantiate the Unit Under Test (UUT)
-	mips uut (
-		.clk(clk), 
-		.reset(reset),
-		.addr(addr),
-		.interrupt(interrupt)
+	mips uut(
+		.clk(clk),.reset(reset),
+		.interrupt(interrupt),
+		.addr(addr)
 	);
 
-	parameter exception_pc = 32'h00003018;
-	integer exception_count;
-	integer interrupt_counter;
-	integer needInterrupt;
-
 	initial begin
-		exception_count = 0;
-		interrupt = 0;
-		needInterrupt = 0;
-		interrupt_counter = 0;
-		// Initialize Inputs
-		clk = 0;
-		reset = 1;
-		#20 reset = 0;
-		// Wait 100 ns for global reset to finish
-		// Add stimulus here
-
+		clk<=0; reset<=1;
+		interruptCounter<=0; interrupt<=0;
+		interruptAddress[0]<=32'h00003088;	interruptAddress[1]<=32'h000030b0;	interruptAddress[2]<=32'h000030e0;
+		interruptAddress[3]<=32'h00003110;	interruptAddress[4]<=32'h00003138;	interruptAddress[5]<=32'h00003160;
+		interruptAddress[6]<=32'h00003190;	interruptAddress[7]<=32'h000031bc;	interruptAddress[8]<=32'h000031e8;
+		interruptAddress[9]<=32'h00003218;	interruptAddress[10]<=32'h0000324c;	interruptAddress[11]<=32'h0000327c;
+		interruptAddress[12]<=32'h000032ac;	interruptAddress[13]<=32'h000032e0;	interruptAddress[14]<=32'h00003310;
+		interruptAddress[15]<=32'h000041b0;
+		#10; reset<=0;
 	end
-   always #2 clk = ~clk;
-
-   always @(negedge clk) begin
-      if (reset) begin
-	  	interrupt_counter = 0;
-		needInterrupt = 0;
-		interrupt = 0;
-	  end else begin
-	  	if (interrupt) begin
-		  	if (interrupt_counter == 0) begin
-				interrupt = 0;
-			end else begin
-				interrupt_counter = interrupt_counter - 1;
-			end
-		end else if (needInterrupt) begin
-			needInterrupt = 0;
-			interrupt = 1;
-			interrupt_counter = 5;
-		end else begin
-			case (addr)
-				exception_pc: 
-					begin
-						if (exception_count == 0) begin
-							exception_count = 1;
-							interrupt = 1;
-							interrupt_counter = 5;
-						end
-					end
-			endcase
+	always @(negedge clk) begin
+		if (reset) interrupt<=0;
+		else if (interrupt) begin
+			if (interruptCounter==0) interrupt<=0;
+			else interruptCounter<=interruptCounter-1;
 		end
-	  end
-	
-   end
+		else if (addr==interruptAddress[0]) begin interruptAddress[0]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[1]) begin interruptAddress[1]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[2]) begin interruptAddress[2]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[3]) begin interruptAddress[3]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[4]) begin interruptAddress[4]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[5]) begin interruptAddress[5]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[6]) begin interruptAddress[6]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[7]) begin interruptAddress[7]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[8]) begin interruptAddress[8]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[9]) begin interruptAddress[9]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[10]) begin interruptAddress[10]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[11]) begin interruptAddress[11]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[12]) begin interruptAddress[12]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[13]) begin interruptAddress[13]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[14]) begin interruptAddress[14]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else if (addr==interruptAddress[15]) begin interruptAddress[15]<=32'h7f7f7f7f; interruptCounter<=5; interrupt<=1; end
+		else begin end
+	end
+
+	always #5 clk<=~clk;
 
 endmodule
