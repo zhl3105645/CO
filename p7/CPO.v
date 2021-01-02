@@ -31,7 +31,7 @@ module CP0(
     input [6:2] ExcCode,//中断/异常的类型，来自异常功能部件
     input [5:0] HWInt,//6个设备中断，来自外部硬件设备
     input We,//CP0寄存器写使能，执行MTC0指令时产生
-    //inout EXLSet,//用于置位SR的EXL，流水线在W阶段产生
+    //input EXLSet,//用于置位SR的EXL，流水线在W阶段产生
     input EXLClr,//用于清除SR的EXL，执行ERET指令时产生
     input clk,
     input reset,

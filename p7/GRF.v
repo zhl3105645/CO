@@ -54,7 +54,7 @@ module GRF(
                     if(WE&&(A3!=5'd0))
                         begin
                             GPR[A3]=WD3;
-									 $display("%d@%h: $%d <= %h", $time,PC_backD,A3,WD3);
+							$display("%d@%h: $%d <= %h", $time,PC_backD,A3,WD3);
                         end
                 end
         end

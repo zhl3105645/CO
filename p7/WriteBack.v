@@ -29,7 +29,7 @@ module WriteBack(
     output RegWriteW2,
     output [31:0] ResultW,
     output [4:0] AwriteW2,
-	 output [31:0] PC_backD
+	output [31:0] PC_backD
     );
 	 wire [31:0] PC_8;
 	 assign PC_8=PC_4W+4;

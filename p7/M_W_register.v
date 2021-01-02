@@ -39,6 +39,17 @@ module M_W_register(
 	output reg [1:0] TnewW,
 	output reg [4:0] AwriteW
     );
+	initial 
+		begin
+			RegWriteW=1'b0;
+			MemtoRegW=2'b00;
+			LoadopW=3'b0;
+			RDW=32'd0;
+			ALUoutW=32'd0;
+			PC_4W=32'd0;
+			TnewW=2'b00;
+			AwriteW=5'd0;
+		end
 	always@(posedge clk)
 		begin
 			if(reset||CLR)

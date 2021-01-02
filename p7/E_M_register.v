@@ -65,6 +65,30 @@ module E_M_register(
 	output reg eretM,
 	output reg [4:0] rdM
     );
+	initial 
+		begin
+			RegWriteM=1'b0;
+			MemtoRegM=2'b00;
+			MemWriteM=1'b0;
+			BEopM=2'b0;
+			LoadopM=3'b0;
+			ALUoutM=32'd0;
+			WriteDataM=32'd0;
+			PC_4M=32'd0;
+			TnewM=2'b00;
+			A_rsM=5'd0;
+			A_rtM=5'd0;
+			AwriteM=5'd0;
+			ExcCodeM[6:2]=5'd0;
+			if_bdM=1'b0;
+			loadM=1'b0;
+			storeM=1'b0;
+			OVM=1'b0;
+			mfcoM=1'b0;
+			mtcoM=1'b0;
+			eretM=1'b0;
+			rdM=5'd0;
+		end
 	always@(posedge clk)
 		begin
 			if(reset||CLR)

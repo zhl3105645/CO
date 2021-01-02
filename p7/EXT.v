@@ -23,6 +23,10 @@ module EXT(
     input  EXTop,
     output reg [31:0] ext_offset
     );
+	initial 
+		begin
+			ext_offset=32'b0;
+		end
     always@(*)
         begin
             case(EXTop)

@@ -82,6 +82,38 @@ module D_E_register(
 	output reg eretE,
 	output reg [4:0] rdE
     );
+	initial 
+		begin
+			RegWriteE<=0;
+			MemtoRegE<=0;
+			MemWriteE<=0;
+			ALUcontrolE<=0;
+			ALUSrcE<=0;
+			RegDstE<=0;
+			BEopE<=0;
+			startE<=0;
+			mult_div_opE<=0;
+			LoadopE<=0;
+			OUTopE<=0;
+			RD1E<=0;
+			RD2E<=0;
+			shamtE<=0;
+			A_rsE<=0;
+			A_rtE<=0;
+			AwriteE<=0;
+			PC_4E<=0;
+			ext_immE<=0;
+			TnewE<=0;
+			ExcCodeE[6:2]<=5'b0;
+			if_bdE<=1'b0;
+			loadE<=1'b0;
+			storeE<=1'b0;
+			cal_ovE<=1'b0;
+			mfcoE<=1'b0;
+			mtcoE<=1'b0;
+			eretE<=1'b0;
+			rdE<=5'd0;
+		end
 	always@(posedge clk)
 		begin
 			if(reset||CLR)
@@ -135,11 +167,9 @@ module D_E_register(
 					A_rsE<=0;
 					A_rtE<=0;
 					AwriteE<=0;
-					PC_4E<=PC_4D;
 					ext_immE<=0;
 					TnewE<=0;
 					ExcCodeE[6:2]<=5'b0;
-					if_bdE<=if_bdD;
 					loadE<=1'b0;
 					storeE<=1'b0;
 					cal_ovE<=1'b0;
@@ -147,6 +177,8 @@ module D_E_register(
 					mtcoE<=1'b0;
 					eretE<=1'b0;
 					rdE<=5'd0;
+					if_bdE<=if_bdD;
+					PC_4E<=PC_4D;
 				end
 			else 
 				begin

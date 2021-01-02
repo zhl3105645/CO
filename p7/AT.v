@@ -289,7 +289,7 @@ module AT(
 			else if(MTCO)
 				begin
 					Tuse_rs=2'b11;
-					Tuse_rt=2'b10;
+					Tuse_rt=2'b00;
 					TnewD=2'b11;
 					A_rsD=5'd0;
 					A_rtD=rt;

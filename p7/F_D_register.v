@@ -34,6 +34,13 @@ module F_D_register(
     );
 	wire [31:0] PCF;
 	assign PCF=PC_4F-4;
+	initial 
+		begin
+			InstrD<=32'b0;
+			PC_4D<=32'b0;
+			ExcCodeD[6:2]<=5'b0;
+			if_bdD<=1'b0;
+		end
 	always@(posedge clk)
 		begin
 			if(reset|CLR)
